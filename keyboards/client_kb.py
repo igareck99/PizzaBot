@@ -3,5 +3,10 @@ from aiogram.types import KeyboardButton, ReplyKeyboardRemove, ReplyKeyboardMark
 k1 = KeyboardButton('/Режим_работы')
 k2 = KeyboardButton('/Адрес')
 
-kb_client = ReplyKeyboardMarkup()
-kb_client.add(k1).add(k2)
+k3 = KeyboardButton('Поделиться номером', request_contact=True)
+k4 = KeyboardButton('Поделиться номером', request_location=True)
+
+kb_client = ReplyKeyboardMarkup(resize_keyboard=True)
+kb_client.insert(k1).insert(k2)
+kb_client.row(k3,k4)
+#kb_client.row(k1,k2)
