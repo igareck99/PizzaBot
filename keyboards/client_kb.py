@@ -4,7 +4,7 @@ k1 = KeyboardButton('/Режим_работы')
 k2 = KeyboardButton('/Адрес')
 
 k3 = KeyboardButton('Поделиться номером', request_contact=True)
-k4 = KeyboardButton('Поделиться номером', request_location=True)
+k4 = KeyboardButton('Поделиться геолокацией', request_location=True)
 
 kb_client = ReplyKeyboardMarkup(resize_keyboard=True)
 kb_client.insert(k1).insert(k2)

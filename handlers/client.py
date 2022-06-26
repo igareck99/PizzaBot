@@ -6,6 +6,7 @@ from aiogram.types import ReplyKeyboardRemove
 
 # @dp.message_handler(commands=['start', 'help'])
 async def commands_start(message: types.Message):
+    print(message)
     await bot.send_message(message.from_user.id, 'Приятного аппетита', reply_markup= kb_client)
     await message.delete()
 
