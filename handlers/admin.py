@@ -2,6 +2,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram import types, Dispatcher
 from create_bot import dp, bot
+from database.sqlite_db import sql_add_command
+from keyboards import admin_buttons
 
 ID = 0
 
@@ -14,10 +16,9 @@ class FSMAdmin(StatesGroup):
 
 # @dp.message_handler(commands=['moderator'], is_chat_admin = True)
 async def make_changes_command(message: types.Message):
-    print("dmdoodkodo")
     global ID
     ID = message.from_user.id
-    await message.reply('Что хотел хозяин?')
+    await message.reply('Что хотел хозяин?', reply_markup=admin_buttons.kb_admin)
     await message.delete()
 
 
@@ -28,6 +29,14 @@ async def cm_start(message: types.Message):
         print("dfdscsd  {}".format(message.from_user.id))
         await FSMAdmin.photo.set()
         await message.reply('Загрузи фото')
+
+@dp.message_handler(state='*', commands='отмена')
+async def cancel_handler(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    await state.finish()
+    await message.reply('OK')
 
 #@dp.message_handler(content_types= ['photo'], state = FSMAdmin.photo)
 async def load_photo(message: types.Message, state: FSMContext):
@@ -58,17 +67,8 @@ async def load_price(message: types.Message, state: FSMContext):
     if message.from_user.id == ID:
         async with state.proxy() as data:
             data['price'] = float(message.text)
-        async with state.proxy() as data:
-            await message.reply(str(data))
+        await sql_add_command(state)
         await state.finish()
-
-@dp.message_handler(state='*', commands='отмена')
-async def cancel_handler(message: types.Message, state: FSMContext):
-    current_state = await state.get_state()
-    if current_state is None:
-        return
-    await state.finish()
-    await message.reply('OK')
 
 
 
